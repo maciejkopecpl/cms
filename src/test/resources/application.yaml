@@ -1,0 +1,18 @@
+spring:
+  data:
+    mongodb:
+      port: 0 # use random value
+  main:
+    allow-bean-definition-overriding: true
+  mail:
+    host: smtp.host.com
+graphql:
+  servlet:
+    websocket:
+      enabled: false
+application:
+  mail:
+    to: fake@mail.com
+    subject: "test"
+  recaptcha-secret: "FAKE_SECRET"
+  allowed-origins: "*"

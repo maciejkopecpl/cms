@@ -1,0 +1,11 @@
+query($id: ID = "id") {
+    module(id: $id) {
+        __typename
+        ... on Module {
+            id
+            type
+            title,
+            data
+        },
+    }
+}

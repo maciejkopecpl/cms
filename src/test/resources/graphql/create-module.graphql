@@ -1,0 +1,14 @@
+mutation {
+    createModule(module: { title: "Title of module", type: "ICONS" }) {
+        id
+        module {
+            id,
+            title,
+            type
+        }
+        status {
+            status
+            message
+        }
+    }
+}

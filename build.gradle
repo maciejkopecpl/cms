@@ -1,0 +1,82 @@
+plugins {
+    id "java"
+    id "maven-publish"
+    id "io.freefair.lombok" version "5.1.0"
+    id 'org.springframework.boot' version '2.4.0-M1'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id "com.github.ben-manes.versions" version "0.29.0"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+}
+
+ext {
+    springVersion = '2.4.0-M1'
+    graphqlVersion = '7.0.1'
+    mapstructVersion = '1.4.0.Beta3'
+    guavaVersion = '29.0-jre'
+    junitVersion = '5.7.0-M1'
+    embedMongoVersion = '2.2.0'
+    reactorTestVersion = '3.4.0-M1'
+    hibernateValidatorVersion = '7.0.0.Alpha6'
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-configuration-processor:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb-reactive:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-webflux:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-mail:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
+
+    implementation "com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-tools:${graphqlVersion}"
+    implementation "com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-webflux:${graphqlVersion}"
+
+    implementation "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
+    implementation "org.hibernate:hibernate-validator-annotation-processor:${hibernateValidatorVersion}"
+
+    implementation "com.google.guava:guava:${guavaVersion}"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    runtimeOnly "org.springframework.boot:spring-boot-devtools:${springVersion}"
+    runtimeOnly "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlVersion}"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
+    testImplementation "io.projectreactor:reactor-test:${reactorTestVersion}"
+    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${embedMongoVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "com.graphql-java-kickstart:graphql-spring-boot-starter-test:${graphqlVersion}"
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+}
+
+group = "pl.maciejkopec"
+version = "0.0.1-SNAPSHOT"
+description = "cms"
+sourceCompatibility = '14'
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += "-Amapstruct.defaultComponentModel=spring"
+    options.compilerArgs += "--enable-preview"
+    options.encoding = "UTF-8"
+
+}
+
+tasks.withType(Test) {
+    jvmArgs += "--enable-preview"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootBuildImage {
+    builder = "micneo/cms"
+}
+
+compileJava.inputs.files(processResources)

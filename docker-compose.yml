@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  cms_db:
+    container_name: cms-db
+    image: mongo
+    restart: always
+    #    environment:
+    #      MONGO_INITDB_ROOT_USERNAME: root
+    #      MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - backend
+  #    ports:
+  #      - 5432:5432
+
+  #  cache:
+  #    container_name: pclo-cache
+  #    image: memcached:alpine
+  #    restart: always
+  #    networks:
+  #      - backend
+
+  cms_app:
+    container_name: cms-api
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - cms_db
+    env_file:
+      - .env
+    environment:
+      SPRING_DATA_MONGODB_HOST: cms-db
+      SPRING_DATA_MONGODB_PORT: 27017
+    networks:
+      - backend
+    ports:
+      - 8080:8080
+
+networks:
+  backend:

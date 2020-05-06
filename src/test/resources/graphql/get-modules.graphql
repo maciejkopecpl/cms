@@ -1,0 +1,8 @@
+query {
+    modules {
+        id
+        title
+        type
+        data
+    }
+}

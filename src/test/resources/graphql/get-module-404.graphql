@@ -1,0 +1,14 @@
+query {
+    module(id: "404_ID") {
+        __typename
+        ... on Module {
+            id
+            type
+            title
+        },
+        __typename ... on Status {
+            status,
+            message
+        }
+    }
+}

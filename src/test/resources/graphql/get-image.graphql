@@ -1,0 +1,10 @@
+query($id: ID = "id") {
+    image(id: $id) {
+        __typename
+        ... on Image {
+            id
+            image
+            alt
+        },
+    }
+}

@@ -1,0 +1,7 @@
+query {
+    images {
+        id
+        image
+        alt
+    }
+}

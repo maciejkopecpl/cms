@@ -1,0 +1,6 @@
+mutation {
+    deleteModule(id: "id") {
+        status
+        message
+    }
+}

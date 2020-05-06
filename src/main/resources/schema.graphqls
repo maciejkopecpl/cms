@@ -1,0 +1,101 @@
+type Query {
+    # module
+    modules: [Module],
+    module(id: ID): ModuleResult,
+    # image
+    images: [Image],
+    image(id: ID): ImageResult
+}
+
+type Mutation {
+    # module
+    createModule(module:CreateModuleInput): CreateModulePayload!,
+    deleteModule(id:ID!): Status!
+    updateModule(module:UpdateModuleInput): UpdateModulePayload!,
+    #image
+    deleteImage(id:ID!): Status!,
+    updateImage(image:UpdateImageInput): UpdateImagePayload!,
+}
+
+# dtos
+type Module {
+    id: ID
+    type: ModuleType
+    title: String
+    data: String
+    order: Int
+}
+
+type Image {
+    id: ID!
+    image: String
+    alt: String
+}
+
+# inputs
+input UpdateModuleInput {
+    id: ID!
+    title: String
+    type: String!
+    data: String
+}
+
+input CreateModuleInput {
+    title: String
+    type: String!
+    data: String
+}
+
+input CreateImageInput {
+    image: String
+    alt: String
+}
+
+input UpdateImageInput {
+    id: ID!
+    image: String
+    alt: String
+}
+
+# payloads
+type CreateModulePayload {
+    id: ID
+    module: Module!,
+    status: Status!,
+}
+
+type UpdateModulePayload {
+    id: ID!
+    module: Module!,
+    status: Status!,
+}
+
+type CreateImagePayload {
+    id: ID!
+    image: Image!,
+    status: Status!,
+}
+
+type UpdateImagePayload {
+    id: ID!
+    image: Image!,
+    status: Status!,
+}
+
+# results
+union ModuleResult = Module | Status
+union ImageResult = Image | Status
+
+# common
+type Status {
+    status: Int,
+    message: String
+}
+
+enum ModuleType {
+    ICONS,
+    WIDE_IMAGE,
+    GALLERY,
+    SKILLS,
+    CONTACT_FORM
+}

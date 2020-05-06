@@ -1,0 +1,14 @@
+query {
+    image(id: "404_ID") {
+        __typename
+        ... on Image {
+            id
+            image
+            alt
+        },
+        __typename ... on Status {
+            status,
+            message
+        }
+    }
+}

@@ -1,0 +1,14 @@
+mutation {
+    updateImage(image: { id: "id", image: "image_id", alt: "alt" }) {
+        id
+        image {
+            id,
+            image,
+            alt
+        }
+        status {
+            status
+            message
+        }
+    }
+}

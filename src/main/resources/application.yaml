@@ -1,0 +1,27 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://cms:${DB_PASSWORD}@plmaciejkopec-db.791ip.mongodb.net/<dbname>?retryWrites=true&w=majority
+      database: cms
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: "21bc445aab2b40"
+    password: ${SMTP_PASSWORD}
+
+graphiql:
+  cdn:
+    enabled: true
+    version: latest
+
+server:
+  error:
+    include-exception: false
+    include-stacktrace: never
+
+application:
+  mail:
+    to: "kontakt@maciejkopec.pl"
+    subject: "[Homepage] Mail from: "
+  recaptcha-secret: ${GOOGLE_RECAPTCHA_SECRET}
+  allowed-origins: "http://localhost:8000,http://localhost"

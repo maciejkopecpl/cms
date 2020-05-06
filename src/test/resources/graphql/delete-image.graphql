@@ -1,0 +1,6 @@
+mutation {
+    deleteImage(id: "id") {
+        status
+        message
+    }
+}
