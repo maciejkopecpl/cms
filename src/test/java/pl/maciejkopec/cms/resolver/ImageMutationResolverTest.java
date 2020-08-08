@@ -1,7 +1,16 @@
 package pl.maciejkopec.cms.resolver;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static pl.maciejkopec.cms.data.ImageTestData.Document;
+
 import com.graphql.spring.boot.test.GraphQLTest;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +26,6 @@ import pl.maciejkopec.cms.repository.CommonMongoOperations;
 import pl.maciejkopec.cms.repository.ImageRepository;
 import pl.maciejkopec.cms.repository.ModuleRepository;
 import reactor.core.publisher.Mono;
-
-import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static pl.maciejkopec.cms.data.ImageTestData.Document;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {ImageMapperImpl.class, ModuleMapperImpl.class})
@@ -78,7 +80,7 @@ public class ImageMutationResolverTest {
     assertThat(response.get("$.data.updateImage.id")).isEqualTo("id");
     assertThat(response.get("$.data.updateImage.image.id")).isEqualTo("id");
     assertThat(response.get("$.data.updateImage.image.image")).isEqualTo("image_id");
-    assertThat(response.get("$.data.updateImage.image.alt")).isEqualTo("alt");
+    assertThat(response.get("$.data.updateImage.image.filename")).isEqualTo("filename");
     assertThat(response.get("$.data.updateImage.status.status")).isEqualTo("200");
     assertThat(response.get("$.data.updateImage.status.message")).isEqualTo("OK");
   }
@@ -94,7 +96,7 @@ public class ImageMutationResolverTest {
     assertThat(response.get("$.data.updateImage.id")).isEqualTo("id");
     assertThat(response.get("$.data.updateImage.image.id")).isEqualTo("id");
     assertThat(response.get("$.data.updateImage.image.image")).isEqualTo("image_id");
-    assertThat(response.get("$.data.updateImage.image.alt")).isEqualTo("alt");
+    assertThat(response.get("$.data.updateImage.image.filename")).isEqualTo("filename");
     assertThat(response.get("$.data.updateImage.status.status")).isEqualTo("404");
     assertThat(response.get("$.data.updateImage.status.message")).isEqualTo("Not Found");
   }

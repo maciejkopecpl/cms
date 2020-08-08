@@ -1,8 +1,13 @@
 package pl.maciejkopec.cms.e2e;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static pl.maciejkopec.cms.data.ImageTestData.Document;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import java.io.IOException;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,12 +18,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import pl.maciejkopec.cms.dto.Image;
 import pl.maciejkopec.cms.repository.ImageRepository;
 import reactor.core.publisher.Flux;
-
-import java.io.IOException;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static pl.maciejkopec.cms.data.ImageTestData.Document;
 
 @SpringBootTest(
     properties = "spring.main.web-application-type=reactive",
@@ -37,7 +36,7 @@ public class ImageIntegrationTest {
         .deleteAll()
         .thenMany(
             Flux.just("1", "2", "3", "4")
-                .map(id -> Document.notSaved().toBuilder().alt("Document #" + id).build())
+                .map(id -> Document.notSaved().toBuilder().filename("Document-" + id).build())
                 .flatMap(imageRepository::save))
         .blockLast();
     imageRepository

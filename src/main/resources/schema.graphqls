@@ -29,7 +29,7 @@ type Module {
 type Image {
     id: ID!
     image: String
-    alt: String
+    filename: String
 }
 
 # inputs
@@ -48,13 +48,13 @@ input CreateModuleInput {
 
 input CreateImageInput {
     image: String
-    alt: String
+    filename: String
 }
 
 input UpdateImageInput {
     id: ID!
     image: String
-    alt: String
+    filename: String
 }
 
 # payloads

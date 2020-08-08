@@ -4,7 +4,7 @@ query {
         ... on Image {
             id
             image
-            alt
+            filename
         },
         __typename ... on Status {
             status,

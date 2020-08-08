@@ -1,10 +1,10 @@
 mutation {
-    updateImage(image: { id: "id", image: "image_id", alt: "alt" }) {
+    updateImage(image: { id: "id", image: "image_id", filename: "filename" }) {
         id
         image {
             id,
             image,
-            alt
+            filename
         }
         status {
             status

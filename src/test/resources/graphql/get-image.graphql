@@ -4,7 +4,7 @@ query($id: ID = "id") {
         ... on Image {
             id
             image
-            alt
+            filename
         },
     }
 }

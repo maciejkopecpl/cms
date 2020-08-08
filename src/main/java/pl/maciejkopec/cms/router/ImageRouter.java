@@ -30,13 +30,14 @@ public class ImageRouter {
             builder -> {
               builder
                   .route(GET("/{id}").and(accept(ANY_IMAGE)), imageHandler::showImage)
-                  .route(POST("/").and(accept(MULTIPART_FORM_DATA)), imageHandler::create)
+                  .route(POST("/").and(accept(MULTIPART_FORM_DATA)), imageHandler::upload)
                   .nest(
                       accept(APPLICATION_JSON),
                       routes ->
                           routes
                               .route(GET("/{id}"), imageHandler::get)
                               .route(DELETE("/{id}"), imageHandler::delete)
+                              .route(DELETE("/"), imageHandler::deleteAll)
                               .route(PUT("/{id}"), imageHandler::update)
                               .route(GET("/"), imageHandler::findAll));
             })

@@ -11,5 +11,5 @@ import pl.maciejkopec.cms.dto.graphql.Result;
 public class Image implements Dto<String>, Result {
   String id;
   String image;
-  String alt;
+  String filename;
 }

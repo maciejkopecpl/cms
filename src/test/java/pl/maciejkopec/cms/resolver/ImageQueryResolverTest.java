@@ -1,7 +1,13 @@
 package pl.maciejkopec.cms.resolver;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static pl.maciejkopec.cms.data.ImageTestData.Document;
+
 import com.graphql.spring.boot.test.GraphQLTest;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +23,6 @@ import pl.maciejkopec.cms.repository.ImageRepository;
 import pl.maciejkopec.cms.repository.ModuleRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static pl.maciejkopec.cms.data.ImageTestData.Document;
 
 @ExtendWith(SpringExtension.class)
 @GraphQLTest
@@ -47,7 +46,7 @@ public class ImageQueryResolverTest {
     assertThat(response.isOk()).isTrue();
     assertThat(response.get("$.data.image.id")).isEqualTo("id");
     assertThat(response.get("$.data.image.image")).isEqualTo("image_id");
-    assertThat(response.get("$.data.image.alt")).isEqualTo("alt");
+    assertThat(response.get("$.data.image.filename")).isEqualTo("filename");
   }
 
   @Test
@@ -72,6 +71,6 @@ public class ImageQueryResolverTest {
     assertThat(response.getList("$.data.images", Object.class)).hasSize(2);
     assertThat(response.get("$.data.images[1].id")).isEqualTo("id");
     assertThat(response.get("$.data.images[1].image")).isNull();
-    assertThat(response.get("$.data.images[1].alt")).isNull();
+    assertThat(response.get("$.data.images[1].filename")).isNull();
   }
 }

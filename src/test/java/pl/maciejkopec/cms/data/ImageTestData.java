@@ -16,7 +16,7 @@ public final class ImageTestData {
     }
 
     public static Image valid() {
-      return minimum().toBuilder().alt("alt").image("image_id").build();
+      return minimum().toBuilder().filename("filename").image("image_id").build();
     }
 
     public static Image notSaved() {
@@ -32,7 +32,7 @@ public final class ImageTestData {
     }
 
     public static ImageDocument valid() {
-      return minimum().toBuilder().alt("alt").image("image_id").build();
+      return minimum().toBuilder().filename("filename").image("image_id").build();
     }
 
     public static ImageDocument notSaved() {

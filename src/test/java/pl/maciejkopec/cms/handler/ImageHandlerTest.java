@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -54,6 +55,7 @@ public class ImageHandlerTest {
   @Autowired private WebTestClient webTestClient;
   @MockBean private CommonMongoOperations commonMongoOperations;
   @MockBean private ReactiveGridFsTemplate gridFsTemplate;
+  @MockBean private ReactiveMongoTemplate mongoTemplate;
 
   @Test
   public void shouldGetImage() {
@@ -100,19 +102,24 @@ public class ImageHandlerTest {
 
   @Test
   public void shouldSaveImage() {
-    final ObjectId objectId = ObjectId.get();
-    final ImageDocument notSavedDocument =
-        Document.minimum().toBuilder().id(null).image(objectId.toHexString()).build();
-    final ImageDocument savedWithImage = notSavedDocument.toBuilder().id("id").build();
+    final var objectId = ObjectId.get();
+    final var filename = "image.png";
+    final var notSavedDocument =
+        Document.minimum().toBuilder()
+            .id(null)
+            .image(objectId.toHexString())
+            .filename(filename)
+            .build();
+    final var savedWithImage = notSavedDocument.toBuilder().id("id").filename(filename).build();
 
-    when(gridFsTemplate.store(any(), eq("image.png"), any(Object.class)))
+    when(gridFsTemplate.store(any(), eq(filename), any(Object.class)))
         .thenReturn(Mono.just(objectId));
     when(repository.insert(notSavedDocument)).thenReturn(Mono.just(savedWithImage));
 
-    final MultipartBodyBuilder builder = new MultipartBodyBuilder();
+    final var builder = new MultipartBodyBuilder();
     builder
         .part("file", new ByteArrayResource("just some test data".getBytes()))
-        .filename("image.png");
+        .filename(filename);
 
     webTestClient
         .post()
@@ -122,11 +129,12 @@ public class ImageHandlerTest {
         .exchange()
         .expectStatus()
         .isOk()
-        .expectBody(Image.class)
-        .isEqualTo(Dto.minimum().toBuilder().image(objectId.toHexString()).build());
+        .expectBodyList(Image.class)
+        .contains(
+            Dto.minimum().toBuilder().filename(filename).image(objectId.toHexString()).build());
 
     verify(repository).insert(notSavedDocument);
-    verify(gridFsTemplate).store(any(), eq("image.png"), any(Object.class));
+    verify(gridFsTemplate).store(any(), eq(filename), any(Object.class));
   }
 
   @Test

@@ -21,11 +21,11 @@ public class ImageRepositoryTest
 
   @Override
   public ImageDocument module() {
-    return ImageDocument.builder().image(ObjectId.get().toHexString()).alt("test").build();
+    return ImageDocument.builder().image(ObjectId.get().toHexString()).filename("test").build();
   }
 
   @Override
   public ImageDocument update(final ImageDocument module) {
-    return module.toBuilder().alt("updated").build();
+    return module.toBuilder().filename("updated").build();
   }
 }

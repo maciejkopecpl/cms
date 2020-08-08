@@ -11,5 +11,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ImageDocument implements Domain<String> {
   @Id String id;
   String image;
-  String alt;
+  String filename;
 }

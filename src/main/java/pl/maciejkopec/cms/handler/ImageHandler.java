@@ -5,12 +5,12 @@ import static org.springframework.http.MediaType.asMediaType;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 import static pl.maciejkopec.cms.repository.Queries.byId;
 
-import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsResource;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
 import org.springframework.http.codec.multipart.FilePart;
@@ -23,6 +23,8 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import pl.maciejkopec.cms.domain.ImageDocument;
 import pl.maciejkopec.cms.dto.Image;
+import pl.maciejkopec.cms.dto.Module;
+import pl.maciejkopec.cms.dto.SavedImage;
 import pl.maciejkopec.cms.mapper.ImageMapper;
 import pl.maciejkopec.cms.repository.CommonMongoOperations;
 import pl.maciejkopec.cms.repository.ImageRepository;
@@ -38,19 +40,42 @@ public class ImageHandler {
   private final ImageMapper mapper;
   private final ReactiveGridFsTemplate gridFsTemplate;
   private final CommonMongoOperations commonMongoOperations;
+  private final ReactiveMongoTemplate mongoTemplate;
 
   @NotNull
-  public Mono<ServerResponse> create(final ServerRequest request) {
+  public Mono<ServerResponse> upload(final ServerRequest request) {
     final var response =
         request
             .body(BodyExtractors.toMultipartData())
-            .map(MultiValueMap::toSingleValueMap)
+            .flux()
             .flatMap(this::saveImage)
             .map(mapper::toDomain)
             .flatMap(repository::insert)
             .map(mapper::toDto);
 
     return ok().body(response, Image.class);
+  }
+
+  private Flux<SavedImage> saveImage(final MultiValueMap<String, Part> values) {
+    return Flux.merge(
+        values.get("file").stream()
+            .map(FilePart.class::cast)
+            .map(
+                file ->
+                    gridFsTemplate
+                        .store(file.content(), file.filename(), file.headers().getContentType())
+                        .map(item -> new SavedImage(item, file.filename())))
+            .collect(Collectors.toList()));
+  }
+
+  @NotNull
+  public Mono<ServerResponse> deleteAll(final ServerRequest serverRequest) {
+    final var response =
+        Flux.concat(
+            repository.deleteAll(),
+            mongoTemplate.dropCollection("fs.files"),
+            mongoTemplate.dropCollection("fs.chunks"));
+    return ok().body(response, Module.class);
   }
 
   @NotNull
@@ -65,7 +90,6 @@ public class ImageHandler {
   @NotNull
   public Mono<ServerResponse> findAll(final ServerRequest request) {
     final var response = repository.findAll().map(mapper::toDto);
-
     return ok().body(response, Image.class);
   }
 
@@ -100,11 +124,6 @@ public class ImageHandler {
         .map(mapper::toDto)
         .flatMap(image -> ok().bodyValue(image))
         .switchIfEmpty(ServerResponse.notFound().build());
-  }
-
-  private Mono<ObjectId> saveImage(final Map<String, Part> values) {
-    final var file = (FilePart) values.get("file");
-    return gridFsTemplate.store(file.content(), file.filename(), file.headers().getContentType());
   }
 
   @NotNull
