@@ -1,8 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://cms:${DB_PASSWORD}@plmaciejkopec-db.791ip.mongodb.net/<dbname>?retryWrites=true&w=majority
-      database: cms
+      uri: mongodb://localhost/cms
   mail:
     host: smtp.mailtrap.io
     port: 2525
