@@ -1,7 +1,11 @@
 package pl.maciejkopec.cms.resolver;
 
 import graphql.kickstart.tools.GraphQLQueryResolver;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import pl.maciejkopec.cms.dto.Module;
@@ -10,10 +14,6 @@ import pl.maciejkopec.cms.dto.graphql.Status;
 import pl.maciejkopec.cms.mapper.ModuleMapper;
 import pl.maciejkopec.cms.repository.ModuleRepository;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -38,6 +38,10 @@ public class ModuleQueryResolver implements GraphQLQueryResolver {
   }
 
   public CompletableFuture<List<Module>> modules() {
-    return repository.findAll().map(mapper::toDto).collect(Collectors.toList()).toFuture();
+    return repository
+        .findAll(Sort.by("order"))
+        .map(mapper::toDto)
+        .collect(Collectors.toList())
+        .toFuture();
   }
 }

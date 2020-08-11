@@ -64,7 +64,13 @@ public class ImageHandler {
                 file ->
                     gridFsTemplate
                         .store(file.content(), file.filename(), file.headers().getContentType())
-                        .map(item -> new SavedImage(item, file.filename())))
+                        .map(
+                            item ->
+                                new SavedImage(
+                                    item,
+                                    file.filename(),
+                                    requireNonNullElse(file.headers().getContentType(), "")
+                                        .toString())))
             .collect(Collectors.toList()));
   }
 

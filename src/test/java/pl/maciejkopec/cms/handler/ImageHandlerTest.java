@@ -109,6 +109,7 @@ public class ImageHandlerTest {
             .id(null)
             .image(objectId.toHexString())
             .filename(filename)
+            .contentType("application/octet-stream")
             .build();
     final var savedWithImage = notSavedDocument.toBuilder().id("id").filename(filename).build();
 
@@ -131,7 +132,11 @@ public class ImageHandlerTest {
         .isOk()
         .expectBodyList(Image.class)
         .contains(
-            Dto.minimum().toBuilder().filename(filename).image(objectId.toHexString()).build());
+            Dto.minimum().toBuilder()
+                .filename(filename)
+                .image(objectId.toHexString())
+                .contentType("application/octet-stream")
+                .build());
 
     verify(repository).insert(notSavedDocument);
     verify(gridFsTemplate).store(any(), eq(filename), any(Object.class));

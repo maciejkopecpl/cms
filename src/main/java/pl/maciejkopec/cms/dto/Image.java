@@ -12,4 +12,5 @@ public class Image implements Dto<String>, Result {
   String id;
   String image;
   String filename;
+  String contentType;
 }

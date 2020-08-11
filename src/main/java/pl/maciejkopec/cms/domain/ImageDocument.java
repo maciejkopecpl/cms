@@ -12,4 +12,5 @@ public class ImageDocument implements Domain<String> {
   @Id String id;
   String image;
   String filename;
+  String contentType;
 }

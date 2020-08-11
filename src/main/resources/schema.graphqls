@@ -29,6 +29,7 @@ type Module {
 type Image {
     id: ID!
     image: String
+    contentType: String
     filename: String
 }
 
@@ -93,6 +94,7 @@ type Status {
 }
 
 enum ModuleType {
+    HEADER,
     ICONS,
     WIDE_IMAGE,
     GALLERY,

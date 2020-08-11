@@ -1,12 +1,20 @@
 package pl.maciejkopec.cms.resolver;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static pl.maciejkopec.cms.data.ModuleTestData.Document;
+
 import com.graphql.spring.boot.test.GraphQLTest;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,13 +25,6 @@ import pl.maciejkopec.cms.repository.ImageRepository;
 import pl.maciejkopec.cms.repository.ModuleRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static pl.maciejkopec.cms.data.ModuleTestData.Document;
 
 @ExtendWith(SpringExtension.class)
 @GraphQLTest
@@ -63,7 +64,8 @@ public class ModuleQueryResolverTest {
 
   @Test
   public void shouldGetAllModules() throws IOException {
-    when(moduleRepository.findAll()).thenReturn(Flux.just(Document.valid(), Document.minimum()));
+    when(moduleRepository.findAll(any(Sort.class)))
+        .thenReturn(Flux.just(Document.valid(), Document.minimum()));
 
     final var response = graphQLTestTemplate.postForResource("graphql/get-modules.graphql");
 
