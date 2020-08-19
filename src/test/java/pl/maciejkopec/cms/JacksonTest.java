@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.maciejkopec.cms.configuration.JacksonConfiguration;
+import pl.maciejkopec.cms.data.MailTestData;
 import pl.maciejkopec.cms.domain.ModuleType;
 import pl.maciejkopec.cms.dto.Mail;
 import pl.maciejkopec.cms.dto.Module;
@@ -26,16 +27,16 @@ public class JacksonTest {
 
   @Test
   void shouldSupportRecord() throws JsonProcessingException {
-    final var mail = new Mail("a", "b", "c", "d");
+    final var mail = MailTestData.valid();
     final var result = objectMapper.writeValueAsString(mail);
 
     assertThat(result).isEqualToIgnoringWhitespace(
         """
               {
-                  "from": "a",
-                  "name": "b",
-                  "message": "c",
-                  "token": "d"
+                  "from": "from@mail.com",
+                  "name": "Name",
+                  "message": "Message",
+                  "token": "token"
               }
             """
     );

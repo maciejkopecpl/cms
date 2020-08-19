@@ -14,12 +14,17 @@ public class ApplicationProperties {
 
   private final Mail mail;
   private final String recaptchaSecret;
+  private final String apiKey;
   private final List<String> allowedOrigins;
 
   public ApplicationProperties(
-      final Mail mail, final String recaptchaSecret, final List<String> allowedOrigins) {
+      final Mail mail,
+      final String recaptchaSecret,
+      final String apiKey,
+      final List<String> allowedOrigins) {
     this.mail = mail;
     this.recaptchaSecret = recaptchaSecret;
+    this.apiKey = apiKey;
     this.allowedOrigins = requireNonNullElse(allowedOrigins, List.of());
   }
 

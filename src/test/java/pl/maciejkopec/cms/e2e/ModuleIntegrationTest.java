@@ -1,24 +1,24 @@
 package pl.maciejkopec.cms.e2e;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static pl.maciejkopec.cms.data.ModuleTestData.Document;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import java.io.IOException;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import pl.maciejkopec.cms.dto.Module;
 import pl.maciejkopec.cms.repository.ModuleRepository;
 import reactor.core.publisher.Flux;
-
-import java.io.IOException;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static pl.maciejkopec.cms.data.ModuleTestData.Document;
 
 @SpringBootTest(
     properties = "spring.main.web-application-type=reactive",
@@ -32,7 +32,14 @@ public class ModuleIntegrationTest {
   @Autowired private ObjectMapper objectMapper;
 
   @BeforeEach
-  void setUp() {
+  void configureClients() {
+    webTestClient =
+        webTestClient.mutate().defaultHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY").build();
+    graphQLTestTemplate.addHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY");
+  }
+
+  @BeforeEach
+  void cleanData() {
     moduleRepository
         .deleteAll()
         .thenMany(

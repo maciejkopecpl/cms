@@ -24,3 +24,4 @@ application:
     subject: "[Homepage] Mail from: "
   recaptcha-secret: ${GOOGLE_RECAPTCHA_SECRET}
   allowed-origins: "http://localhost:8000,http://localhost"
+  api-key: ${API_KEY}

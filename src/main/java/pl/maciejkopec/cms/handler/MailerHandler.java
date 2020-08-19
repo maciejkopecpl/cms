@@ -28,6 +28,7 @@ public class MailerHandler {
         .flatMap(validationService::validate)
         .flatMap(recaptchaService::validate)
         .flatMap(mailService::send)
-        .flatMap(mail -> ok().bodyValue(mail));
+        .flatMap(mail -> ok().bodyValue(mail))
+        .switchIfEmpty(ServerResponse.badRequest().build());
   }
 }

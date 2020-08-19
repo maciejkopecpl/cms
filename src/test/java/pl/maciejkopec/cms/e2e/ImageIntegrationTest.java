@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import pl.maciejkopec.cms.dto.Image;
@@ -29,6 +30,13 @@ public class ImageIntegrationTest {
   @Autowired private WebTestClient webTestClient;
   @Autowired private ImageRepository imageRepository;
   @Autowired private ObjectMapper objectMapper;
+
+  @BeforeEach
+  void configureClients() {
+    webTestClient =
+        webTestClient.mutate().defaultHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY").build();
+    graphQLTestTemplate.addHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY");
+  }
 
   @BeforeEach
   void setUp() {

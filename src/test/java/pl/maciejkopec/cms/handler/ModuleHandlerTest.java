@@ -9,6 +9,7 @@ import static pl.maciejkopec.cms.data.ModuleTestData.Dto;
 import static pl.maciejkopec.cms.repository.Queries.byId;
 
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -48,6 +50,12 @@ public class ModuleHandlerTest {
   @MockBean private ModuleRepository repository;
   @Autowired private WebTestClient webTestClient;
   @MockBean private CommonMongoOperations commonMongoOperations;
+
+  @BeforeEach
+  void configureWebClient() {
+    webTestClient =
+        webTestClient.mutate().defaultHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY").build();
+  }
 
   @Test
   public void shouldGetModule() {

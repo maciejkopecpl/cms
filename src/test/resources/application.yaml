@@ -16,3 +16,4 @@ application:
     subject: "test"
   recaptcha-secret: "FAKE_SECRET"
   allowed-origins: "*"
+  api-key: "FAKE_API_KEY"

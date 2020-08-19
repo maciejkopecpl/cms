@@ -12,6 +12,7 @@ import static pl.maciejkopec.cms.repository.Queries.byId;
 
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.context.ContextConfiguration;
@@ -56,6 +58,12 @@ public class ImageHandlerTest {
   @MockBean private CommonMongoOperations commonMongoOperations;
   @MockBean private ReactiveGridFsTemplate gridFsTemplate;
   @MockBean private ReactiveMongoTemplate mongoTemplate;
+
+  @BeforeEach
+  void configureWebClient() {
+    webTestClient =
+        webTestClient.mutate().defaultHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY").build();
+  }
 
   @Test
   public void shouldGetImage() {

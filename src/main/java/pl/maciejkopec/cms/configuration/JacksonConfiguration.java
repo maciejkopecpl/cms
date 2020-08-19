@@ -37,12 +37,12 @@ public class JacksonConfiguration implements WebFluxConfigurer {
     final var objectMapper = jackson2ObjectMapperBuilder().build();
     configurer.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper));
     configurer.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper));
-    ModuleType.CONTACT_FORM.name();
   }
 
   @Bean
   public RuntimeWiring.Builder runtimeWiring() {
-    final NaturalEnumValuesProvider moduleValues = new NaturalEnumValuesProvider(ModuleType.class);
+    final NaturalEnumValuesProvider<ModuleType> moduleValues =
+        new NaturalEnumValuesProvider<>(ModuleType.class);
 
     return RuntimeWiring.newRuntimeWiring()
         .type("ModuleType", typeWiring -> typeWiring.enumValues(moduleValues));
