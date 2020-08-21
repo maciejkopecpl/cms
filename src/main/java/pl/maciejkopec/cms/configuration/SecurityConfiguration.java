@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -46,10 +45,6 @@ public class SecurityConfiguration {
         .disable()
         .authorizeExchange()
         .pathMatchers("/mailer")
-        .permitAll()
-        .and()
-        .authorizeExchange()
-        .pathMatchers(HttpMethod.GET, "/images/*")
         .permitAll()
         .and()
         .authorizeExchange()
