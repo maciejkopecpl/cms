@@ -45,7 +45,9 @@ A quick look at the top-level files and directories.
     ├── src
     ├── .gitignore
     ├── Dockerfile
+    ├── LICENSE
     ├── Procfile
+    ├── README.md
     ├── build.gradle
     ├── docker-compose.yml
     ├── empty.env
@@ -54,38 +56,45 @@ A quick look at the top-level files and directories.
     ├── intellij-java-google-style.xml
     ├── lombok.config
     ├── settings.gradle
-    ├── system.properties
-    ├── LICENSE
-    └── README.md
+    └── system.properties
 
-1.  **`/gradle/wrapper`**: This directory contains `gradle` wrapper.
+1.  **`/gradle/wrapper`**: This directory contains `Gradle` wrapper.
 
-1.  **`/src`**: This directory will contain all of the code r. `src` is a convention for “source code”.
+2.  **`/src`**: This directory will contain all of the code. `src` is a convention for “source code”.
 
 3.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
 
 4.  **`Dockerfile`**: This file contains all the commands to assemble an image.
 
-5.  **`Procfile`**: This is a configuration file for [Heroku](https://www.heroku.com/) cloud.
+5.  **`LICENSE`**: This project is licensed under the MIT license.
 
-6.  **`LICENSE`**: This project is licensed under the MIT license.
+6.  **`Procfile`**: This is a build configuration file for [Heroku](https://www.heroku.com/) cloud.
 
-7. **`README.md`**: A text file containing useful reference information about your project.
+7. **`README.md`**: A text file containing useful reference information about this project.
 
-8. **`empty.env`**: A empty file containing all requires enviroment variables.
+8. **`build.gradle`**: A Gradle file containing details about dependencies and compile details for this project.
 
-9.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.org/docs/gatsby-config/) for more detail).
+9. **`docker-compose.yml`**: A Docker compose file containing definition fo multi-container docker application.
 
-10.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.org/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
+10. **`empty.env`**: A empty file containing all required environment variables.
 
-11. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
+11. **`gradlew`**: A Gradle batch script for executing the build with the Wrapper.
 
-12. **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
+12. **`gradlew.bat`**: A Gradle batch script for executing the build with the Wrapper.
+
+13. **`intellij-java-google-style.xml`**: A file containing Google Style for IntelliJ.
+
+14. **`lombok.config`**: A file containing Lombok configuration.
+
+15. **`settings.gradle`**: A file containing Gradle settings.
+
+16. **`system.properties`**: A file containing system configuration for [Heroku](https://www.heroku.com/) cloud.
 
 
-## 🏗️ Backend
 
-The backend services required by this application are available in this [CMS Backend](https://github.com/maciejkopecpl/cms).
+## 🏪 Frontend
+
+The frontend application that uses these backend services is available here [CMS UI](https://github.com/maciejkopecpl/cms-ui).
 
 ## 👨‍⚖️ License
 
