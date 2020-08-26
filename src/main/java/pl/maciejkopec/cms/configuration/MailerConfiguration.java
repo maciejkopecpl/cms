@@ -12,9 +12,9 @@ public class MailerConfiguration {
   @Bean
   public JavaMailSender javaMailSender(
       @Value("${spring.mail.host}") final String host,
-      @Value("${spring.mail.port}") final Integer port,
-      @Value("${spring.mail.username}") final String username,
-      @Value("${spring.mail.password}") final String password) {
+      @Value("${spring.mail.port:25}") final Integer port,
+      @Value("${spring.mail.username:}") final String username,
+      @Value("${spring.mail.password:}") final String password) {
     final var mailSender = new JavaMailSenderImpl();
     mailSender.setHost(host);
     mailSender.setPort(port);
