@@ -1,6 +1,5 @@
 package pl.maciejkopec.cms.service;
 
-import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,8 +17,7 @@ public class MailService {
   public MailService(
       final JavaMailSender mailSender,
       @Value("${application.mail.to}") final String mailTo,
-      @Value("${application.mail.subject}") final String subject,
-      final Validator validator) {
+      @Value("${application.mail.subject}") final String subject) {
     this.mailSender = mailSender;
     this.mailTo = mailTo;
     this.subject = subject;
