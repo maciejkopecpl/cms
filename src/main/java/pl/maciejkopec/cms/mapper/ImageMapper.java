@@ -19,6 +19,7 @@ public interface ImageMapper extends BaseMapper<Image, ImageDocument> {
   @Override
   Image toDto(ImageDocument image);
 
+  @Mapping(target = "id", ignore = true)
   @Mapping(source = "objectId", target = "image", qualifiedByName = "objectIdToString")
   ImageDocument toDomain(SavedImage image);
 

@@ -21,7 +21,6 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static pl.maciejkopec.cms.data.ModuleTestData.Document;
 
