@@ -7,6 +7,8 @@ spring:
     port: 2525
     username: "21bc445aab2b40"
     password: ${SMTP_PASSWORD}
+  main:
+    lazy-initialization: true
 
 graphiql:
   cdn:
