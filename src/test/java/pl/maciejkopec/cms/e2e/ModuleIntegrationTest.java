@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,6 +25,7 @@ import reactor.core.publisher.Flux;
     properties = "spring.main.web-application-type=reactive",
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
+@AutoConfigureWebTestClient
 public class ModuleIntegrationTest {
 
   @Autowired private GraphQLTestTemplate graphQLTestTemplate;
@@ -35,7 +37,7 @@ public class ModuleIntegrationTest {
   void configureClients() {
     webTestClient =
         webTestClient.mutate().defaultHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY").build();
-    graphQLTestTemplate.addHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY");
+    graphQLTestTemplate.withAdditionalHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY");
   }
 
   @BeforeEach

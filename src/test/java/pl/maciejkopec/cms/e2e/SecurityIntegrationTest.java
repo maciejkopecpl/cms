@@ -5,6 +5,7 @@ import static java.util.stream.Stream.of;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -12,6 +13,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
     properties = "spring.main.web-application-type=reactive",
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
+@AutoConfigureWebTestClient
 public class SecurityIntegrationTest {
 
   @Autowired private WebTestClient webTestClient;

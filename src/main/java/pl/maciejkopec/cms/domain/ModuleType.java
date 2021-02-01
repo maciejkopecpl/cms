@@ -6,5 +6,5 @@ public enum ModuleType {
   WIDE_IMAGE,
   GALLERY,
   SKILLS,
-  CONTACT_FORM;
+  CONTACT_FORM
 }
