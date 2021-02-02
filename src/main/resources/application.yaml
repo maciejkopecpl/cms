@@ -9,7 +9,8 @@ spring:
     password: ${SMTP_PASSWORD}
   main:
     lazy-initialization: true
-
+  jmx:
+    enabled: false
 graphiql:
   cdn:
     enabled: true

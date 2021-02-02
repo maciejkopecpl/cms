@@ -31,6 +31,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-webflux:${springVersion}"
     implementation "org.springframework.boot:spring-boot-starter-mail:${springVersion}"
     implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
+    compile 'org.springframework.boot:spring-boot-starter-undertow'
 
     implementation "com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-tools:${graphqlVersion}"
     implementation "com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-webflux:${graphqlVersion}"
@@ -43,7 +44,7 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${mapstructBindingVesion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
-    runtimeOnly "org.springframework.boot:spring-boot-devtools:${springVersion}"
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${springVersion}"
     runtimeOnly "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlVersion}"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
