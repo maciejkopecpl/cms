@@ -78,4 +78,8 @@ bootBuildImage {
     builder = "micneo/cms"
 }
 
+jar {
+    enabled = false
+}
+
 compileJava.inputs.files(processResources)
