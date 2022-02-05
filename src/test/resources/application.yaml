@@ -6,6 +6,9 @@ spring:
     allow-bean-definition-overriding: true
   mail:
     host: smtp.host.com
+  mongodb:
+    embedded:
+      version: 5.0.5
 graphql:
   servlet:
     websocket:
