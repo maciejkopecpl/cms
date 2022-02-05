@@ -12,6 +12,8 @@ import javax.validation.Validation;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import java.util.Locale;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -21,6 +23,8 @@ public class ValidationServiceTest {
 
   @BeforeEach
   void setUp() {
+    Locale.setDefault(Locale.ENGLISH);
+
     validationService =
         new ValidationService(Validation.buildDefaultValidatorFactory().getValidator());
   }

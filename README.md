@@ -102,3 +102,4 @@ The frontend application that uses these backend services is available here [CMS
 ## 👨‍⚖️ License
 
 [MIT](LICENSE)
+
