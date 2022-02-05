@@ -2,8 +2,11 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ master, upgrade_dependencies ]
+    branches:
+      - master
+      - upgrade_dependencies
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
