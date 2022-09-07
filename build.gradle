@@ -2,7 +2,7 @@ plugins {
     id "java"
     id "maven-publish"
     id "io.freefair.lombok" version "6.5.1"
-    id 'org.springframework.boot' version '2.6.7'
+    id 'org.springframework.boot' version '2.7.3'
     id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id "com.github.ben-manes.versions" version "0.42.0"
 }
@@ -20,7 +20,7 @@ ext {
     guavaVersion = '31.1-jre'
     junitVersion = '5.9.0'
     embedMongoVersion = '3.4.5'
-    reactorTestVersion = '3.4.14'
+    reactorTestVersion = '3.4.22'
     hibernateValidatorVersion = '7.0.5.Final'
 }
 
@@ -33,8 +33,10 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'org.springframework.boot:spring-boot-starter-undertow'
 
-    implementation "com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-tools:${graphqlVersion}"
-    implementation "com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-webflux:${graphqlVersion}"
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:14.0.0'
+
+//    implementation "com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-tools:${graphqlVersion}"
+//    implementation "com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-webflux:${graphqlVersion}"
 
     implementation "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
     implementation "org.hibernate:hibernate-validator-annotation-processor:${hibernateValidatorVersion}"
@@ -45,13 +47,15 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
     developmentOnly "org.springframework.boot:spring-boot-devtools"
-    runtimeOnly "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlVersion}"
+//    runtimeOnly "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlVersion}"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "io.projectreactor:reactor-test:${reactorTestVersion}"
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${embedMongoVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-    testImplementation "com.graphql-java-kickstart:graphql-spring-boot-starter-test:${graphqlVersion}"
+//    testImplementation "com.graphql-java-kickstart:graphql-spring-boot-starter-test:${graphqlVersion}"
+    testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:14.0.0'
+
 }
 
 group = "pl.maciejkopec"
