@@ -33,10 +33,7 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'org.springframework.boot:spring-boot-starter-undertow'
 
-    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:14.0.0'
-
-//    implementation "com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-tools:${graphqlVersion}"
-//    implementation "com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-webflux:${graphqlVersion}"
+    implementation "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlVersion}"
 
     implementation "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
     implementation "org.hibernate:hibernate-validator-annotation-processor:${hibernateValidatorVersion}"
@@ -47,14 +44,12 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
     developmentOnly "org.springframework.boot:spring-boot-devtools"
-//    runtimeOnly "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlVersion}"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "io.projectreactor:reactor-test:${reactorTestVersion}"
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${embedMongoVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-//    testImplementation "com.graphql-java-kickstart:graphql-spring-boot-starter-test:${graphqlVersion}"
-    testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:14.0.0'
+    testImplementation "com.graphql-java-kickstart:graphql-spring-boot-starter-test:${graphqlVersion}"
 
 }
 
