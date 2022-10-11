@@ -36,6 +36,8 @@ dependencies {
     implementation "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlVersion}"
 
     implementation "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
+    implementation "com.microsoft.azure:applicationinsights-runtime-attach:3.4.1"
+
     implementation "org.hibernate:hibernate-validator-annotation-processor:${hibernateValidatorVersion}"
 
     implementation "com.google.guava:guava:${guavaVersion}"

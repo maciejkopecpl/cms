@@ -1,5 +1,6 @@
 package pl.maciejkopec.cms;
 
+import com.microsoft.applicationinsights.attach.ApplicationInsights;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -12,6 +13,7 @@ import pl.maciejkopec.cms.configuration.ApplicationProperties;
 public class CmsApplication {
 
   public static void main(final String[] args) {
+    ApplicationInsights.attach();
     SpringApplication.run(CmsApplication.class, args);
   }
 }
