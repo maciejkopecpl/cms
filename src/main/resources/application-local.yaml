@@ -1,0 +1,8 @@
+logging:
+  level:
+    root: debug
+
+server:
+  error:
+    include-exception: true
+    include-stacktrace: always
