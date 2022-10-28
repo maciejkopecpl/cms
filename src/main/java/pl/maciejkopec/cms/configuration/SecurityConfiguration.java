@@ -1,10 +1,5 @@
 package pl.maciejkopec.cms.configuration;
 
-import static java.util.List.of;
-import static java.util.Objects.requireNonNullElse;
-import static pl.maciejkopec.cms.configuration.AuthenticationToken.preAuthenticated;
-
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +19,12 @@ import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+
+import static java.util.List.of;
+import static java.util.Objects.requireNonNullElse;
+import static pl.maciejkopec.cms.configuration.AuthenticationToken.preAuthenticated;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -45,6 +46,10 @@ public class SecurityConfiguration {
         .disable()
         .authorizeExchange()
         .pathMatchers("/mailer")
+        .permitAll()
+        .and()
+        .authorizeExchange()
+        .pathMatchers("/actuator/health")
         .permitAll()
         .and()
         .authorizeExchange()
