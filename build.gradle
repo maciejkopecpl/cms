@@ -2,9 +2,9 @@ plugins {
     id "java"
     id "maven-publish"
     id "io.freefair.lombok" version "6.6.1"
-    id 'org.springframework.boot' version '2.7.5'
+    id 'org.springframework.boot' version '3.0.2'
     id 'io.spring.dependency-management' version '1.1.0'
-    id "com.github.ben-manes.versions" version "0.44.0"
+    id "com.github.ben-manes.versions" version "0.45.0"
 }
 
 repositories {
@@ -14,17 +14,19 @@ repositories {
 }
 
 ext {
-    graphqlVersion = '14.0.0'
+    graphqlVersion = '15.0.0'
     mapstructVersion = '1.5.3.Final'
     mapstructBindingVesion = '0.2.0'
     guavaVersion = '31.1-jre'
     junitVersion = '5.9.2'
-    embedMongoVersion = '3.5.2'
+    embedMongoVersion = '4.4.0'
     reactorTestVersion = '3.5.2'
     hibernateValidatorVersion = '8.0.0.Final'
 }
 
 dependencies {
+    implementation "org.springframework.boot:spring-boot-properties-migrator"
+
     implementation "org.springframework.boot:spring-boot-configuration-processor"
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb-reactive"
     implementation "org.springframework.boot:spring-boot-starter-webflux"
@@ -37,7 +39,7 @@ dependencies {
     implementation "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlVersion}"
 
     implementation "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
-    implementation "com.microsoft.azure:applicationinsights-runtime-attach:3.4.8"
+    implementation "com.microsoft.azure:applicationinsights-runtime-attach:3.4.9"
 
     implementation "org.hibernate:hibernate-validator-annotation-processor:${hibernateValidatorVersion}"
 
@@ -51,6 +53,7 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "io.projectreactor:reactor-test:${reactorTestVersion}"
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${embedMongoVersion}"
+    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:${embedMongoVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testImplementation "com.graphql-java-kickstart:graphql-spring-boot-starter-test:${graphqlVersion}"
 

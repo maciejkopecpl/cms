@@ -14,6 +14,9 @@ public class MailerRouter {
   @Bean
   public RouterFunction<ServerResponse> mailerRoutes(final MailerHandler mailerHandler) {
 
-    return route().POST("/mailer", mailerHandler::send).build();
+    return route()
+            .POST("/mailer", mailerHandler::send)
+            .POST("/mailer/", mailerHandler::send)
+          .build();
   }
 }

@@ -1,12 +1,12 @@
 package pl.maciejkopec.cms.service;
 
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Validator;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;

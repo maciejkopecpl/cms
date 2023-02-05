@@ -3,11 +3,12 @@ package pl.maciejkopec.cms.dto.graphql;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Builder;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 import pl.maciejkopec.cms.dto.Module;
 
 @Value
 @Builder(toBuilder = true)
-@JsonDeserialize(builder = UpdateModulePayload.UpdateModulePayloadBuilder.class)
+@Jacksonized
 public class UpdateModulePayload {
   String id;
   Module module;

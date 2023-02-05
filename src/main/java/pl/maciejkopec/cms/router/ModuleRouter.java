@@ -25,12 +25,19 @@ public class ModuleRouter {
                     routes ->
                         routes
                             .GET("/{id}", moduleHandler::findById)
+                            .GET("/{id}/", moduleHandler::findById)
                             .DELETE("/{id}", moduleHandler::deleteById)
+                            .DELETE("/{id}/", moduleHandler::deleteById)
                             .DELETE("/", moduleHandler::deleteAll)
+                            .DELETE("", moduleHandler::deleteAll)
                             .PUT("/{id}", moduleHandler::update)
+                            .PUT("/{id}/", moduleHandler::update)
                             .GET("/", moduleHandler::findAll)
+                            .GET("", moduleHandler::findAll)
                             .POST("/", moduleHandler::save)
-                            .POST("/bulk", moduleHandler::saveBulk)))
+                            .POST("", moduleHandler::save)
+                            .POST("/bulk", moduleHandler::saveBulk))
+                            .POST("/bulk/", moduleHandler::saveBulk))
         .build();
   }
 }
