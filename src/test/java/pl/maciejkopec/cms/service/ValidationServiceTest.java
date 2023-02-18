@@ -8,9 +8,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.test.StepVerifier;
 
-import javax.validation.Validation;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Validation;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Locale;
 
@@ -41,7 +41,7 @@ public class ValidationServiceTest {
     StepVerifier.create(validationService.validate(input))
         .expectErrorSatisfies(
             throwable -> {
-              assertThat(((ResponseStatusException) throwable).getStatus())
+              assertThat(((ResponseStatusException) throwable).getStatusCode())
                   .isEqualTo(HttpStatus.BAD_REQUEST);
               assertThat(((ResponseStatusException) throwable).getReason())
                   .contains("`a` field must not be null", "`b` field must not be blank");

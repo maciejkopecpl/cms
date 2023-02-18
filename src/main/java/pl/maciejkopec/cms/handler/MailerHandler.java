@@ -2,8 +2,8 @@ package pl.maciejkopec.cms.handler;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;

@@ -63,7 +63,7 @@ public class RecaptchaServiceTest {
         Assertions.assertThrows(
             ResponseStatusException.class, () -> recaptchaService.validate(valid()).block());
 
-    assertThat(exception.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(exception.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(exception.getReason()).isEqualTo("Invalid ReCaptcha token.");
   }
 }

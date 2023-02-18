@@ -1,10 +1,13 @@
 package pl.maciejkopec.cms.resolver;
 
-import graphql.kickstart.tools.GraphQLMutationResolver;
+import static pl.maciejkopec.cms.repository.Queries.byId;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import pl.maciejkopec.cms.domain.ImageDocument;
 import pl.maciejkopec.cms.dto.Image;
 import pl.maciejkopec.cms.dto.graphql.Status;
@@ -14,20 +17,17 @@ import pl.maciejkopec.cms.repository.CommonMongoOperations;
 import pl.maciejkopec.cms.repository.ImageRepository;
 import reactor.core.publisher.Mono;
 
-import java.util.concurrent.CompletableFuture;
-
-import static pl.maciejkopec.cms.repository.Queries.byId;
-
-@Component
+@Controller
 @RequiredArgsConstructor
-public class ImageMutationResolver implements GraphQLMutationResolver {
+public class ImageMutationResolver {
 
   private final ImageRepository repository;
   private final ImageMapper mapper;
   private final CommonMongoOperations commonMongoOperations;
   private final ReactiveGridFsTemplate gridFsTemplate;
 
-  public CompletableFuture<Status> deleteImage(final String id) {
+  @MutationMapping
+  public Mono<Status> deleteImage(@Argument final String id) {
     return repository
         .findById(id)
         .flatMap(
@@ -43,11 +43,11 @@ public class ImageMutationResolver implements GraphQLMutationResolver {
             Status.builder()
                 .status(HttpStatus.NOT_FOUND.value())
                 .message(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .build())
-        .toFuture();
+                .build());
   }
 
-  public CompletableFuture<UpdateImagePayload> updateImage(final Image dto) {
+  @MutationMapping
+  public Mono<UpdateImagePayload> updateImage(@Argument("image") final Image dto) {
 
     return commonMongoOperations
         .getAndReplace(mapper.toDomain(dto), byId(dto.getId()), ImageDocument.class)
@@ -67,7 +67,6 @@ public class ImageMutationResolver implements GraphQLMutationResolver {
                         .status(HttpStatus.NOT_FOUND.value())
                         .message(HttpStatus.NOT_FOUND.getReasonPhrase())
                         .build())
-                .build())
-        .toFuture();
+                .build());
   }
 }

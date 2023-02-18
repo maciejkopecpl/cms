@@ -1,6 +1,14 @@
 logging:
   level:
     root: debug
+    org:
+      mongodb: info
+
+spring:
+  graphql:
+    graphiql:
+      enabled: true
+
 
 server:
   error:

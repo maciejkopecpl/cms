@@ -3,10 +3,6 @@ package pl.maciejkopec.cms.e2e;
 import static org.assertj.core.api.Assertions.assertThat;
 import static pl.maciejkopec.cms.data.ImageTestData.Document;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.graphql.spring.boot.test.GraphQLTestTemplate;
-import java.io.IOException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.graphql.test.tester.WebGraphQlTester;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -22,22 +19,27 @@ import pl.maciejkopec.cms.repository.ImageRepository;
 import reactor.core.publisher.Flux;
 
 @SpringBootTest(
-    properties = "spring.main.web-application-type=reactive",
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 @AutoConfigureWebTestClient
 public class ImageIntegrationTest {
 
-  @Autowired private GraphQLTestTemplate graphQLTestTemplate;
-  @Autowired private WebTestClient webTestClient;
-  @Autowired private ImageRepository imageRepository;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired
+  private WebGraphQlTester graphQlTester;
+  @Autowired
+  private WebTestClient webTestClient;
+  @Autowired
+  private ImageRepository imageRepository;
 
   @BeforeEach
   void configureClients() {
-    webTestClient =
-        webTestClient.mutate().defaultHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY").build();
-    graphQLTestTemplate.withAdditionalHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY");
+    this.webTestClient =
+        this.webTestClient.mutate().defaultHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY")
+            .build();
+    this.graphQlTester = this.graphQlTester
+        .mutate()
+        .headers(httpHeaders -> httpHeaders.add(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY"))
+        .build();
   }
 
   @BeforeEach
@@ -58,7 +60,7 @@ public class ImageIntegrationTest {
   }
 
   @Test
-  void shouldMatchGetImagesResponses() throws IOException {
+  void shouldMatchGetImagesResponses() {
 
     final var fluxResponse =
         webTestClient
@@ -74,17 +76,16 @@ public class ImageIntegrationTest {
     assertThat(fluxResponse).hasSize(4);
 
     final var graphQLResponse =
-        graphQLTestTemplate
-            .postForResource("graphql/get-images.graphql")
-            .getList("$.data.images", Image.class);
+        graphQlTester.documentName("get-images").execute()
+            .path("data.images").entityList(Image.class).get();
 
-    assertThat(graphQLResponse).hasSize(4);
-
-    assertThat(graphQLResponse).containsAll(fluxResponse);
+    assertThat(graphQLResponse)
+        .hasSize(4)
+        .containsAll(fluxResponse);
   }
 
   @Test
-  void shouldMatchGetImageResponses() throws IOException {
+  void shouldMatchGetImageResponses() {
     final var document =
         imageRepository.findAll().collectList().blockOptional().orElseThrow().get(0);
     assertThat(document).isNotNull();
@@ -100,15 +101,12 @@ public class ImageIntegrationTest {
             .blockFirst();
     assertThat(fluxResponse).isNotNull();
 
-    final var variables = objectMapper.createObjectNode();
-    variables.set("id", objectMapper.convertValue(document.getId(), JsonNode.class));
-
     final var graphQLResponse =
-        graphQLTestTemplate
-            .perform("graphql/get-image.graphql", variables)
-            .get("$.data.image", Image.class);
-    assertThat(graphQLResponse).isNotNull();
+        graphQlTester.documentName("get-image").variable("id", document.getId()).execute()
+            .path("data.image").entity(Image.class).get();
 
-    assertThat(graphQLResponse).isEqualTo(fluxResponse);
+    assertThat(graphQLResponse)
+        .isNotNull()
+        .isEqualTo(fluxResponse);
   }
 }

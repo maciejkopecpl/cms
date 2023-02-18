@@ -1,11 +1,17 @@
 package pl.maciejkopec.cms.configuration;
 
-import org.jetbrains.annotations.NotNull;
+import static java.util.List.of;
+import static java.util.Objects.requireNonNullElse;
+import static pl.maciejkopec.cms.configuration.AuthenticationToken.preAuthenticated;
+
+import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -20,14 +26,9 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
-import static java.util.List.of;
-import static java.util.Objects.requireNonNullElse;
-import static pl.maciejkopec.cms.configuration.AuthenticationToken.preAuthenticated;
-
 @Configuration
 @EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
 public class SecurityConfiguration {
 
   private final String apiKey;
@@ -81,8 +82,8 @@ public class SecurityConfiguration {
 
   private Mono<MatchResult> requireAuthorizationHeader(final ServerWebExchange exchange) {
     return requireNonNullElse(
-                exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION), "")
-            .isBlank()
+        exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION), "")
+        .isBlank()
         ? MatchResult.notMatch()
         : MatchResult.match();
   }

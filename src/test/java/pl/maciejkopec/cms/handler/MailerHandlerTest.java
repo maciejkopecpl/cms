@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -33,19 +36,33 @@ import reactor.core.publisher.Mono;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(
     classes = {
-      MailerRouter.class,
-      MailerHandler.class,
-      ValidationService.class,
-      JacksonConfiguration.class,
-      SecurityConfiguration.class
+        MailerRouter.class,
+        MailerHandler.class,
+        ValidationService.class,
+        JacksonConfiguration.class,
+        SecurityConfiguration.class
     })
 @WebFluxTest
 @AutoConfigureWebTestClient
 public class MailerHandlerTest {
 
-  @Autowired private WebTestClient webTestClient;
-  @MockBean private MailService mailService;
-  @MockBean private RecaptchaService recaptchaService;
+  @Autowired
+  private WebTestClient webTestClient;
+  @MockBean
+  private MailService mailService;
+  @MockBean
+  private RecaptchaService recaptchaService;
+  @Autowired
+  private ApplicationContext context;
+
+  @BeforeEach
+  public void setup() {
+    this.webTestClient = WebTestClient
+        .bindToApplicationContext(this.context)
+        .configureClient()
+        .defaultHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY")
+        .build();
+  }
 
   @Test
   public void shouldSendMail() {
