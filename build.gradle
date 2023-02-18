@@ -14,7 +14,6 @@ repositories {
 }
 
 ext {
-    graphqlVersion = '15.0.0'
     mapstructVersion = '1.5.3.Final'
     mapstructBindingVesion = '0.2.0'
     guavaVersion = '31.1-jre'
@@ -35,8 +34,7 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'org.springframework.boot:spring-boot-starter-undertow'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
-    implementation "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlVersion}"
+    implementation 'org.springframework.boot:spring-boot-starter-graphql'
 
     implementation "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
     implementation "com.microsoft.azure:applicationinsights-runtime-attach:3.4.9"
@@ -55,7 +53,8 @@ dependencies {
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${embedMongoVersion}"
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:${embedMongoVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-    testImplementation "com.graphql-java-kickstart:graphql-spring-boot-starter-test:${graphqlVersion}"
+    testImplementation 'org.springframework.graphql:spring-graphql-test:1.1.1'
+
 
 }
 

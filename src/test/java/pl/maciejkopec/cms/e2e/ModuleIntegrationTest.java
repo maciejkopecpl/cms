@@ -1,14 +1,16 @@
 package pl.maciejkopec.cms.e2e;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import static org.assertj.core.api.Assertions.assertThat;
+import static pl.maciejkopec.cms.data.ModuleTestData.Document;
+
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.graphql.test.tester.WebGraphQlTester;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -16,29 +18,28 @@ import pl.maciejkopec.cms.dto.Module;
 import pl.maciejkopec.cms.repository.ModuleRepository;
 import reactor.core.publisher.Flux;
 
-import java.io.IOException;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static pl.maciejkopec.cms.data.ModuleTestData.Document;
-
 @SpringBootTest(
-    properties = "spring.main.web-application-type=reactive",
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 @AutoConfigureWebTestClient
 public class ModuleIntegrationTest {
 
-  @Autowired private GraphQLTestTemplate graphQLTestTemplate;
-  @Autowired private WebTestClient webTestClient;
-  @Autowired private ModuleRepository moduleRepository;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired
+  private WebGraphQlTester graphQlTester;
+  @Autowired
+  private WebTestClient webTestClient;
+  @Autowired
+  private ModuleRepository moduleRepository;
 
   @BeforeEach
   void configureClients() {
-    webTestClient =
-        webTestClient.mutate().defaultHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY").build();
-    graphQLTestTemplate.withAdditionalHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY");
+    this.webTestClient =
+        this.webTestClient.mutate().defaultHeader(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY")
+            .build();
+    this.graphQlTester = this.graphQlTester
+        .mutate()
+        .headers(httpHeaders -> httpHeaders.add(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY"))
+        .build();
   }
 
   @BeforeEach
@@ -59,7 +60,7 @@ public class ModuleIntegrationTest {
   }
 
   @Test
-  void shouldMatchGetModulesResponses() throws IOException {
+  void shouldMatchGetModulesResponses() {
 
     final var fluxResponse =
         webTestClient
@@ -75,17 +76,16 @@ public class ModuleIntegrationTest {
     assertThat(fluxResponse).hasSize(4);
 
     final var graphQLResponse =
-        graphQLTestTemplate
-            .postForResource("graphql/get-modules.graphql")
-            .getList("$.data.modules", Module.class);
+        graphQlTester.documentName("get-modules").execute()
+            .path("data.modules").entityList(Module.class).get();
 
-    assertThat(graphQLResponse).hasSize(4);
-
-    assertThat(graphQLResponse).containsAll(fluxResponse);
+    assertThat(graphQLResponse)
+        .hasSize(4)
+        .containsAll(fluxResponse);
   }
 
   @Test
-  void shouldMatchGetModuleResponses() throws IOException {
+  void shouldMatchGetModuleResponses() {
     final var document =
         moduleRepository.findAll().collectList().blockOptional().orElseThrow().get(0);
     assertThat(document).isNotNull();
@@ -101,15 +101,12 @@ public class ModuleIntegrationTest {
             .blockFirst();
     assertThat(fluxResponse).isNotNull();
 
-    final var variables = objectMapper.createObjectNode();
-    variables.set("id", objectMapper.convertValue(document.getId(), JsonNode.class));
-
     final var graphQLResponse =
-        graphQLTestTemplate
-            .perform("graphql/get-module.graphql", variables)
-            .get("$.data.module", Module.class);
-    assertThat(graphQLResponse).isNotNull();
+        graphQlTester.documentName("get-module").variable("id", document.getId()).execute()
+            .path("data.module").entity(Module.class).get();
 
-    assertThat(graphQLResponse).isEqualTo(fluxResponse);
+    assertThat(graphQLResponse)
+        .isNotNull()
+        .isEqualTo(fluxResponse);
   }
 }

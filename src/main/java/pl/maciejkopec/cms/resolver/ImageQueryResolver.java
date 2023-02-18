@@ -1,9 +1,12 @@
 package pl.maciejkopec.cms.resolver;
 
-import graphql.kickstart.tools.GraphQLQueryResolver;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import pl.maciejkopec.cms.dto.Image;
 import pl.maciejkopec.cms.dto.graphql.Result;
 import pl.maciejkopec.cms.dto.graphql.Status;
@@ -11,18 +14,15 @@ import pl.maciejkopec.cms.mapper.ImageMapper;
 import pl.maciejkopec.cms.repository.ImageRepository;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-
-@Component
+@Controller
 @RequiredArgsConstructor
-public class ImageQueryResolver implements GraphQLQueryResolver {
+public class ImageQueryResolver {
 
   private final ImageRepository repository;
   private final ImageMapper mapper;
 
-  public CompletableFuture<Result> image(final String id) {
+  @QueryMapping
+  public Mono<Result> image(@Argument final String id) {
     return repository
         .findById(id)
         .map(mapper::toDto)
@@ -32,11 +32,11 @@ public class ImageQueryResolver implements GraphQLQueryResolver {
                 Status.builder()
                     .status(HttpStatus.NOT_FOUND.value())
                     .message(HttpStatus.NOT_FOUND.getReasonPhrase())
-                    .build()))
-        .toFuture();
+                    .build()));
   }
 
-  public CompletableFuture<List<Image>> images() {
-    return repository.findAll().map(mapper::toDto).collect(Collectors.toList()).toFuture();
+  @QueryMapping
+  public Mono<List<Image>> images() {
+    return repository.findAll().map(mapper::toDto).collect(Collectors.toList());
   }
 }

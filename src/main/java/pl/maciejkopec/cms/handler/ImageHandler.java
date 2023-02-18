@@ -5,10 +5,10 @@ import static org.springframework.http.MediaType.asMediaType;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 import static pl.maciejkopec.cms.repository.Queries.byId;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsResource;

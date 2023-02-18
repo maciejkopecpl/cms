@@ -3,8 +3,8 @@ package pl.maciejkopec.cms.handler;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 import static pl.maciejkopec.cms.repository.Queries.byId;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;

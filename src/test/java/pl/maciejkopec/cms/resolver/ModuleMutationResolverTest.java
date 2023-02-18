@@ -1,129 +1,191 @@
 package pl.maciejkopec.cms.resolver;
 
-import com.graphql.spring.boot.test.GraphQLTest;
-import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import pl.maciejkopec.cms.configuration.JacksonConfiguration;
-import pl.maciejkopec.cms.mapper.ImageMapperImpl;
-import pl.maciejkopec.cms.mapper.ModuleMapperImpl;
+import org.springframework.graphql.test.tester.WebGraphQlTester;
+import org.springframework.http.HttpHeaders;
+import pl.maciejkopec.cms.data.ModuleTestData.Document;
+import pl.maciejkopec.cms.domain.ModuleType;
+import pl.maciejkopec.cms.dto.Module;
+import pl.maciejkopec.cms.dto.graphql.CreateModulePayload;
+import pl.maciejkopec.cms.dto.graphql.Status;
+import pl.maciejkopec.cms.dto.graphql.UpdateModulePayload;
 import pl.maciejkopec.cms.repository.CommonMongoOperations;
-import pl.maciejkopec.cms.repository.ImageRepository;
 import pl.maciejkopec.cms.repository.ModuleRepository;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-import static pl.maciejkopec.cms.data.ModuleTestData.Document;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {ImageMapperImpl.class, ModuleMapperImpl.class})
-@GraphQLTest
-@Import(JacksonConfiguration.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@EnableAutoConfiguration
+@AutoConfigureGraphQlTester
+@AutoConfigureWebTestClient
 public class ModuleMutationResolverTest {
 
-  @Autowired private GraphQLTestTemplate graphQLTestTemplate;
-  @MockBean private ImageRepository imageRepository;
-  @MockBean private ModuleRepository moduleRepository;
-  @MockBean private CommonMongoOperations commonMongoOperations;
-  @MockBean private ReactiveGridFsTemplate gridFsTemplate;
+  @Autowired
+  private WebGraphQlTester graphQlTester;
+
+  @MockBean
+  private ModuleRepository moduleRepository;
+  @MockBean
+  private CommonMongoOperations commonMongoOperations;
+
+  @BeforeEach
+  public void setUp() {
+    this.graphQlTester = this.graphQlTester
+        .mutate()
+        .headers(httpHeaders -> httpHeaders.add(HttpHeaders.AUTHORIZATION, "FAKE_API_KEY"))
+        .build();
+  }
 
   @Test
-  public void shouldSaveModule() throws Exception {
+  public void shouldSaveModule() {
     when(moduleRepository.save(any())).thenReturn(Mono.just(Document.valid()));
 
-    final var response = graphQLTestTemplate.postForResource("graphql/create-module.graphql");
+    graphQlTester.documentName("create-module").execute()
+        .path("data.createModule").entity(CreateModulePayload.class)
+        .isEqualTo(
+            CreateModulePayload.builder()
+                .id("id")
+                .module(
+                    Module.builder()
+                        .id("id")
+                        .title("Title of module")
+                        .type(ModuleType.ICONS)
+                        .build()
+                )
+                .status(
+                    Status.builder()
+                        .status(201)
+                        .message("Created")
+                        .build()
+                )
+                .build()
+        );
 
-    assertThat(response).isNotNull();
-    assertThat(response.isOk()).isTrue();
-    assertThat(response.get("$.data.createModule.id")).isEqualTo("id");
-    assertThat(response.get("$.data.createModule.module.id")).isEqualTo("id");
-    assertThat(response.get("$.data.createModule.module.title")).isEqualTo("Title of module");
-    assertThat(response.get("$.data.createModule.module.type")).isEqualTo("ICONS");
-    assertThat(response.get("$.data.createModule.status.status")).isEqualTo("201");
-    assertThat(response.get("$.data.createModule.status.message")).isEqualTo("Created");
   }
 
   @Test
-  public void shouldReturn400WhenFailToSaveModule() throws IOException {
+  public void shouldReturn400WhenFailToSaveModule() {
     when(moduleRepository.save(any())).thenReturn(Mono.empty());
 
-    final var response = graphQLTestTemplate.postForResource("graphql/create-module.graphql");
-
-    assertThat(response).isNotNull();
-    assertThat(response.isOk()).isTrue();
-    assertThat(response.get("$.data.createModule.id")).isNull();
-    assertThat(response.get("$.data.createModule.module.title")).isEqualTo("Title of module");
-    assertThat(response.get("$.data.createModule.module.type")).isEqualTo("ICONS");
-    assertThat(response.get("$.data.createModule.status.status")).isEqualTo("400");
-    assertThat(response.get("$.data.createModule.status.message")).isEqualTo("Bad Request");
+    graphQlTester.documentName("create-module").execute()
+        .path("data.createModule").entity(CreateModulePayload.class)
+        .isEqualTo(
+            CreateModulePayload.builder()
+                .id(null)
+                .module(
+                    Module.builder()
+                        .id(null)
+                        .title("Title of module")
+                        .type(ModuleType.ICONS)
+                        .build()
+                )
+                .status(
+                    Status.builder()
+                        .status(400)
+                        .message("Bad Request")
+                        .build()
+                )
+                .build()
+        );
   }
 
   @Test
-  public void shouldDeleteModule() throws IOException {
+  public void shouldDeleteModule() {
     when(moduleRepository.findById("id")).thenReturn(Mono.just(Document.valid()));
     when(moduleRepository.delete(any())).thenReturn(Mono.empty());
 
-    final var response = graphQLTestTemplate.postForResource("graphql/delete-module.graphql");
+    graphQlTester.documentName("delete-module").execute()
+        .path("data.deleteModule").entity(Status.class)
+        .isEqualTo(
+            Status.builder()
+                .status(200)
+                .message("OK")
+                .build()
 
-    assertThat(response).isNotNull();
-    assertThat(response.isOk()).isTrue();
-    assertThat(response.get("$.data.deleteModule.status")).isEqualTo("200");
-    assertThat(response.get("$.data.deleteModule.message")).isEqualTo("OK");
+        );
+
   }
 
   @Test
-  public void shouldReturn404WhenNotFoundForDeleteModule() throws IOException {
+  public void shouldReturn404WhenNotFoundForDeleteModule() {
     when(moduleRepository.findById("id")).thenReturn(Mono.empty());
 
-    final var response = graphQLTestTemplate.postForResource("graphql/delete-module.graphql");
+    graphQlTester.documentName("delete-module").execute()
+        .path("data.deleteModule").entity(Status.class)
+        .isEqualTo(
+            Status.builder()
+                .status(404)
+                .message("Not Found")
+                .build()
 
-    assertThat(response).isNotNull();
-    assertThat(response.isOk()).isTrue();
-    assertThat(response.get("$.data.deleteModule.status")).isEqualTo("404");
-    assertThat(response.get("$.data.deleteModule.message")).isEqualTo("Not Found");
+        );
 
     verify(moduleRepository, never()).delete(any());
   }
 
   @Test
-  public void shouldUpdateModule() throws IOException {
+  public void shouldUpdateModule() {
     when(commonMongoOperations.getAndReplace(any(), any(), any()))
         .thenReturn(Mono.just(Document.valid()));
 
-    final var response = graphQLTestTemplate.postForResource("graphql/update-module.graphql");
+    graphQlTester.documentName("update-module").execute()
+        .path("data.updateModule").entity(UpdateModulePayload.class)
+        .isEqualTo(
+            UpdateModulePayload.builder()
+                .id("id")
+                .module(
+                    Module.builder()
+                        .id("id")
+                        .title("Title of module")
+                        .type(ModuleType.ICONS)
+                        .build()
+                )
+                .status(
+                    Status.builder()
+                        .status(200)
+                        .message("OK")
+                        .build()
+                )
+                .build()
+        );
 
-    assertThat(response).isNotNull();
-    assertThat(response.isOk()).isTrue();
-    assertThat(response.get("$.data.updateModule.id")).isEqualTo("id");
-    assertThat(response.get("$.data.updateModule.module.id")).isEqualTo("id");
-    assertThat(response.get("$.data.updateModule.module.title")).isEqualTo("Title of module");
-    assertThat(response.get("$.data.updateModule.module.type")).isEqualTo("ICONS");
-    assertThat(response.get("$.data.updateModule.status.status")).isEqualTo("200");
-    assertThat(response.get("$.data.updateModule.status.message")).isEqualTo("OK");
   }
 
   @Test
-  public void shouldReturn404WhenNotFoundForUpdate() throws IOException {
+  public void shouldReturn404WhenNotFoundForUpdate() {
     when(commonMongoOperations.getAndReplace(any(), any(), any())).thenReturn(Mono.empty());
 
-    final var response = graphQLTestTemplate.postForResource("graphql/update-module.graphql");
-
-    assertThat(response).isNotNull();
-    assertThat(response.isOk()).isTrue();
-    assertThat(response.get("$.data.updateModule.id")).isEqualTo("id");
-    assertThat(response.get("$.data.updateModule.module.id")).isEqualTo("id");
-    assertThat(response.get("$.data.updateModule.module.title")).isEqualTo("Title of module");
-    assertThat(response.get("$.data.updateModule.module.type")).isEqualTo("ICONS");
-    assertThat(response.get("$.data.updateModule.status.status")).isEqualTo("404");
-    assertThat(response.get("$.data.updateModule.status.message")).isEqualTo("Not Found");
+    graphQlTester.documentName("update-module").execute()
+        .path("data.updateModule").entity(UpdateModulePayload.class)
+        .isEqualTo(
+            UpdateModulePayload.builder()
+                .id("id")
+                .module(
+                    Module.builder()
+                        .id("id")
+                        .title("Title of module")
+                        .type(ModuleType.ICONS)
+                        .build()
+                )
+                .status(
+                    Status.builder()
+                        .status(404)
+                        .message("Not Found")
+                        .build()
+                )
+                .build()
+        );
   }
 }

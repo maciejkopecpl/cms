@@ -1,7 +1,7 @@
 package pl.maciejkopec.cms.repository;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 

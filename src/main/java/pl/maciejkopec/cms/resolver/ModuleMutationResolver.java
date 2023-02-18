@@ -1,9 +1,12 @@
 package pl.maciejkopec.cms.resolver;
 
-import graphql.kickstart.tools.GraphQLMutationResolver;
+import static pl.maciejkopec.cms.repository.Queries.byId;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import pl.maciejkopec.cms.domain.ModuleDocument;
 import pl.maciejkopec.cms.dto.Module;
 import pl.maciejkopec.cms.dto.graphql.CreateModulePayload;
@@ -14,19 +17,16 @@ import pl.maciejkopec.cms.repository.CommonMongoOperations;
 import pl.maciejkopec.cms.repository.ModuleRepository;
 import reactor.core.publisher.Mono;
 
-import java.util.concurrent.CompletableFuture;
-
-import static pl.maciejkopec.cms.repository.Queries.byId;
-
-@Component
+@Controller
 @RequiredArgsConstructor
-public class ModuleMutationResolver implements GraphQLMutationResolver {
+public class ModuleMutationResolver {
 
   private final ModuleRepository repository;
   private final ModuleMapper mapper;
   private final CommonMongoOperations commonMongoOperations;
 
-  public CompletableFuture<CreateModulePayload> createModule(final Module dto) {
+  @MutationMapping
+  public Mono<CreateModulePayload> createModule(@Argument("module") final Module dto) {
 
     return repository
         .save(mapper.toDomain(dto))
@@ -46,11 +46,11 @@ public class ModuleMutationResolver implements GraphQLMutationResolver {
                         .status(HttpStatus.BAD_REQUEST.value())
                         .message(HttpStatus.BAD_REQUEST.getReasonPhrase())
                         .build())
-                .build())
-        .toFuture();
+                .build());
   }
 
-  public CompletableFuture<Status> deleteModule(final String id) {
+  @MutationMapping
+  public Mono<Status> deleteModule(@Argument final String id) {
     return repository
         .findById(id)
         .flatMap(document -> repository.delete(document).then(Mono.just(document)))
@@ -64,11 +64,11 @@ public class ModuleMutationResolver implements GraphQLMutationResolver {
             Status.builder()
                 .status(HttpStatus.NOT_FOUND.value())
                 .message(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .build())
-        .toFuture();
+                .build());
   }
 
-  public CompletableFuture<UpdateModulePayload> updateModule(final Module dto) {
+  @MutationMapping
+  public Mono<UpdateModulePayload> updateModule(@Argument("module") final Module dto) {
 
     return commonMongoOperations
         .getAndReplace(mapper.toDomain(dto), byId(dto.getId()), ModuleDocument.class)
@@ -88,7 +88,6 @@ public class ModuleMutationResolver implements GraphQLMutationResolver {
                         .status(HttpStatus.NOT_FOUND.value())
                         .message(HttpStatus.NOT_FOUND.getReasonPhrase())
                         .build())
-                .build())
-        .toFuture();
+                .build());
   }
 }
