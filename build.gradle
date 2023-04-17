@@ -14,7 +14,7 @@ repositories {
 }
 
 ext {
-    mapstructVersion = '1.5.3.Final'
+    mapstructVersion = '1.5.4.Final'
     mapstructBindingVesion = '0.2.0'
     guavaVersion = '31.1-jre'
     junitVersion = '5.9.2'
