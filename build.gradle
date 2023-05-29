@@ -16,7 +16,7 @@ repositories {
 ext {
     mapstructVersion = '1.5.5.Final'
     mapstructBindingVesion = '0.2.0'
-    guavaVersion = '31.1-jre'
+    guavaVersion = '32.0.0-jre'
     junitVersion = '5.9.3'
     embedMongoVersion = '4.6.2'
     reactorTestVersion = '3.5.6'
