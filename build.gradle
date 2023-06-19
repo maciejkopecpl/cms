@@ -18,7 +18,7 @@ ext {
     mapstructBindingVesion = '0.2.0'
     guavaVersion = '32.0.1-jre'
     junitVersion = '5.9.3'
-    embedMongoVersion = '4.6.2'
+    embedMongoVersion = '4.7.0'
     reactorTestVersion = '3.5.6'
     hibernateValidatorVersion = '8.0.0.Final'
 }
