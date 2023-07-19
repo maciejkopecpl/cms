@@ -20,7 +20,7 @@ ext {
     junitVersion = '5.9.3'
     embedMongoVersion = '4.7.0'
     reactorTestVersion = '3.5.8'
-    hibernateValidatorVersion = '8.0.0.Final'
+    hibernateValidatorVersion = '8.0.1.Final'
 }
 
 dependencies {
