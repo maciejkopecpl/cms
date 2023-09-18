@@ -19,7 +19,7 @@ ext {
     guavaVersion = '32.1.2-jre'
     junitVersion = '5.10.0'
     embedMongoVersion = '4.7.0'
-    reactorTestVersion = '3.5.8'
+    reactorTestVersion = '3.5.10'
     hibernateValidatorVersion = '8.0.1.Final'
 }
 
