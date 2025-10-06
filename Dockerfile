@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk as builder
+FROM openjdk:21-jdk as builder
 WORKDIR /workspace/app
 
 COPY gradlew .
@@ -10,7 +10,7 @@ COPY src src
 RUN ./gradlew build
 RUN mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
 
-FROM openjdk:17-jdk-alpine as app
+FROM openjdk:21-jdk-alpine as app
 
 RUN apk --no-cache add bash && \
     wget -O /usr/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
