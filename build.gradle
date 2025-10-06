@@ -15,9 +15,7 @@ repositories {
 
 ext {
     mapstructVersion = '1.6.2'
-    mapstructBindingVesion = '0.2.0'
     guavaVersion = '33.4.0-jre'
-    junitVersion = '5.11.3'
     embedMongoVersion = '4.11.0'
     reactorTestVersion = '3.7.1'
     hibernateValidatorVersion = '8.0.2.Final'
@@ -43,8 +41,8 @@ dependencies {
 
     implementation "com.google.guava:guava:${guavaVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${mapstructBindingVesion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
 
     developmentOnly "org.springframework.boot:spring-boot-devtools"
 
@@ -52,11 +50,7 @@ dependencies {
     testImplementation "io.projectreactor:reactor-test:${reactorTestVersion}"
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${embedMongoVersion}"
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:${embedMongoVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testImplementation 'org.springframework.graphql:spring-graphql-test:1.3.3'
-
-    // Spring Boot 3.4 migration needed
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.3")
 
 }
 
