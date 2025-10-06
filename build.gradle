@@ -15,7 +15,7 @@ repositories {
 
 ext {
     mapstructVersion = '1.6.2'
-    embedMongoVersion = '4.11.0'
+    embedMongoVersion = '4.21.0'
     hibernateValidatorVersion = '8.0.2.Final'
 }
 
