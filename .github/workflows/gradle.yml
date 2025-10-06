@@ -17,10 +17,8 @@ jobs:
           java-version: 21
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Run Gradle tests with debug logging
-        env:
-          ACTIONS_STEP_DEBUG: true # Enable step debug logging
-        run: ./gradlew test
+      - name: Build with Gradle
+        run: ./gradlew build
       - name: Test report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -30,5 +28,3 @@ jobs:
             **/build/reports/
             **/build/test-results/
             **/build/problems/
-      - name: Build with Gradle
-        run: ./gradlew build
