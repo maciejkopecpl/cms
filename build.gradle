@@ -35,7 +35,7 @@ dependencies {
     implementation "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
     implementation "org.hibernate:hibernate-validator-annotation-processor:${hibernateValidatorVersion}"
 
-    implementation "com.microsoft.azure:applicationinsights-runtime-attach:3.6.1"
+    implementation "com.microsoft.azure:applicationinsights-runtime-attach:3.7.5"
 
     implementation "com.google.guava:guava:33.5.0-jre"
 
