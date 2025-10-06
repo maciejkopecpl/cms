@@ -37,7 +37,7 @@ dependencies {
 
     implementation "com.microsoft.azure:applicationinsights-runtime-attach:3.6.1"
 
-    implementation "com.google.guava:guava:33.4.0-jre"
+    implementation "com.google.guava:guava:33.5.0-jre"
 
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
