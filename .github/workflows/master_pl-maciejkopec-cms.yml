@@ -16,6 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
       - name: Set up Java version
         uses: actions/setup-java@v5
         with:
@@ -26,7 +34,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build --build-cache --parallel --daemon
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
