@@ -21,5 +21,14 @@ jobs:
         env:
           ACTIONS_STEP_DEBUG: true # Enable step debug logging
         run: ./gradlew test
+      - name: Test report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: reports
+          path: |
+            **/build/reports/
+            **/build/test-results/
+            **/build/problems/
       - name: Build with Gradle
         run: ./gradlew build
