@@ -13,9 +13,9 @@ import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureG
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.WebGraphQlTester;
 import org.springframework.http.HttpHeaders;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import pl.maciejkopec.cms.data.ModuleTestData.Document;
 import pl.maciejkopec.cms.domain.ModuleType;
 import pl.maciejkopec.cms.dto.Module;
@@ -35,9 +35,9 @@ public class ModuleMutationResolverTest {
   @Autowired
   private WebGraphQlTester graphQlTester;
 
-  @MockBean
+  @MockitoBean
   private ModuleRepository moduleRepository;
-  @MockBean
+  @MockitoBean
   private CommonMongoOperations commonMongoOperations;
 
   @BeforeEach

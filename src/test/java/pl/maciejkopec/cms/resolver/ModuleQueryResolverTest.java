@@ -12,11 +12,11 @@ import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureG
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
 import org.springframework.graphql.test.tester.WebGraphQlTester;
 import org.springframework.http.HttpHeaders;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import pl.maciejkopec.cms.data.ModuleTestData.Document;
 import pl.maciejkopec.cms.domain.ModuleType;
 import pl.maciejkopec.cms.dto.Module;
@@ -34,11 +34,11 @@ public class ModuleQueryResolverTest {
 
   @Autowired
   private WebGraphQlTester graphQlTester;
-  @MockBean
+  @MockitoBean
   private ModuleRepository moduleRepository;
-  @MockBean
+  @MockitoBean
   private CommonMongoOperations commonMongoOperations;
-  @MockBean
+  @MockitoBean
   private ReactiveGridFsTemplate gridFsTemplate;
 
   @BeforeEach

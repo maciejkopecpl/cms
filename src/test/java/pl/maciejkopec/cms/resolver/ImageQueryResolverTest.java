@@ -12,9 +12,9 @@ import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureG
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.graphql.test.tester.WebGraphQlTester;
 import org.springframework.http.HttpHeaders;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import pl.maciejkopec.cms.dto.Image;
 import pl.maciejkopec.cms.repository.ImageRepository;
 import reactor.core.publisher.Flux;
@@ -29,7 +29,7 @@ public class ImageQueryResolverTest {
   @Autowired
   private WebGraphQlTester graphQlTester;
 
-  @MockBean
+  @MockitoBean
   private ImageRepository imageRepository;
 
   @BeforeEach

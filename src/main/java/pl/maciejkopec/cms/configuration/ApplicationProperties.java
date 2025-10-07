@@ -26,15 +26,7 @@ public class ApplicationProperties {
     this.allowedOrigins = requireNonNullElse(allowedOrigins, List.of());
   }
 
-  @Getter
-  public static class Mail {
+    public record Mail(String to, String subject) {
 
-    private final String to;
-    private final String subject;
-
-    public Mail(final String to, final String subject) {
-      this.to = to;
-      this.subject = subject;
-    }
   }
 }

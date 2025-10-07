@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
@@ -26,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -53,11 +53,12 @@ import reactor.core.publisher.Mono;
 @AutoConfigureWebTestClient
 public class ImageHandlerTest {
 
-  @MockBean private ImageRepository repository;
+  @MockitoBean
+  private ImageRepository repository;
   @Autowired private WebTestClient webTestClient;
-  @MockBean private CommonMongoOperations commonMongoOperations;
-  @MockBean private ReactiveGridFsTemplate gridFsTemplate;
-  @MockBean private ReactiveMongoTemplate mongoTemplate;
+  @MockitoBean private CommonMongoOperations commonMongoOperations;
+  @MockitoBean private ReactiveGridFsTemplate gridFsTemplate;
+  @MockitoBean private ReactiveMongoTemplate mongoTemplate;
 
   @BeforeEach
   void configureWebClient() {

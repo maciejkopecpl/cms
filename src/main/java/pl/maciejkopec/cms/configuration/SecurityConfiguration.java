@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity.CsrfSpec;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
@@ -39,21 +40,15 @@ public class SecurityConfiguration {
 
   @Bean
   public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http) {
-    return http.csrf()
-        .disable()
-        .cors()
-        .and()
-        .csrf()
-        .disable()
-        .authorizeExchange()
+    return http.csrf(CsrfSpec::disable).cors()
+        .and().csrf()
+        .disable().authorizeExchange()
         .pathMatchers("/mailer")
         .permitAll()
-        .and()
-        .authorizeExchange()
+        .and().authorizeExchange()
         .pathMatchers("/actuator/health")
         .permitAll()
-        .and()
-        .authorizeExchange()
+        .and().authorizeExchange()
         .anyExchange()
         .authenticated()
         .and()

@@ -15,11 +15,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -47,9 +47,10 @@ import reactor.core.publisher.Mono;
 @AutoConfigureWebTestClient
 public class ModuleHandlerTest {
 
-  @MockBean private ModuleRepository repository;
+  @MockitoBean
+  private ModuleRepository repository;
   @Autowired private WebTestClient webTestClient;
-  @MockBean private CommonMongoOperations commonMongoOperations;
+  @MockitoBean private CommonMongoOperations commonMongoOperations;
 
   @BeforeEach
   void configureWebClient() {
