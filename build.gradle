@@ -16,7 +16,6 @@ repositories {
 ext {
     mapstructVersion = '1.6.3'
     embedMongoVersion = '4.21.0'
-    hibernateValidatorVersion = '8.0.2.Final'
 }
 
 dependencies {
@@ -31,9 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-undertow'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
-
-    implementation "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
-    implementation "org.hibernate:hibernate-validator-annotation-processor:${hibernateValidatorVersion}"
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     implementation "com.microsoft.azure:applicationinsights-runtime-attach:3.7.5"
 
