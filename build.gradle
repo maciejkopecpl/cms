@@ -48,7 +48,7 @@ dependencies {
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${embedMongoVersion}"
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:${embedMongoVersion}"
 
-    testImplementation 'org.springframework.graphql:spring-graphql-test:1.4.3'
+    testImplementation 'org.springframework.graphql:spring-graphql-test:2.0.0'
 
 }
 
