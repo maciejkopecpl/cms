@@ -32,7 +32,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    implementation "com.microsoft.azure:applicationinsights-runtime-attach:3.7.5"
+    implementation "com.microsoft.azure:applicationinsights-runtime-attach:3.7.6"
 
     implementation "com.google.guava:guava:33.5.0-jre"
 
