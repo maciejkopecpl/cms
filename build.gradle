@@ -13,11 +13,6 @@ repositories {
     maven { url 'https://repo.spring.io/milestone' }
 }
 
-ext {
-    mapstructVersion = '1.6.3'
-    embedMongoVersion = '4.22.0'
-}
-
 configurations {
     mockitoAgent
 }
@@ -40,8 +35,8 @@ dependencies {
 
     implementation 'com.google.guava:guava:33.8.0-android'
 
-    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    implementation "org.mapstruct:mapstruct:1.6.3"
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.6.3"
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
 
     developmentOnly "org.springframework.boot:spring-boot-devtools"
@@ -50,8 +45,8 @@ dependencies {
     testImplementation "io.projectreactor:reactor-test"
     mockitoAgent("org.mockito:mockito-core") { transitive = false }
 
-    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:${embedMongoVersion}"
-    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:${embedMongoVersion}"
+    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.22.0"
+    testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.22.0"
 
     testImplementation 'org.springframework.graphql:spring-graphql-test'
 
@@ -81,6 +76,9 @@ java {
 
 test {
     useJUnitPlatform()
+    testLogging {
+        exceptionFormat = 'full'
+    }
 }
 
 bootBuildImage {
